@@ -1,5 +1,11 @@
 # Authorization with CancanCan
 
+## Objectives
+1. Understand how to create an Ability class.
+2. Learn how to model permissions in the database.
+3. Prevent users from accessing certain actions from the controller.
+4. Prevent users from seeing certain pieces of the view.
+
 ## Overview
 
 We have been looking at different modes of authentication. Now, we'll shift our focus, and start dealing with authorization: how do you describe a permissions model, and how do you implement it in Rails?
