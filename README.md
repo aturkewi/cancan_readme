@@ -1,4 +1,4 @@
-# Authorization with Cancan
+# Authorization with CancanCan
 
 ## Overview
 
@@ -27,7 +27,7 @@ In your controllers, it looks like this:
       authorize! :read, @article
     end
 ```
-Here we're calling CanCan's `authorize!` method to determine if the user can `:read` this `@article`. If they can't, an exception is thrown.
+Here we're calling CanCanCan's `authorize!` method to determine if the user can `:read` this `@article`. If they can't, an exception is thrown.
 
 Setting this for every action can be tedious, therefore the load_and_authorize_resource method is provided to automatically authorize all actions in a controller. It will use a before filter to load the resource into an instance variable and authorize it for every action.
 
@@ -94,11 +94,11 @@ This will let the user write any article whose `owner_id` is her user id. (That 
 ```
 This will let the user `:read` any `Project` whose `category`'s `visible` column is `true`.
 
-CanCan doesn't make any assumptions about how you've stored permission information in your user model. It's up to you to add the appropriate fields to support your authorization scheme.
+CanCanCan doesn't make any assumptions about how you've stored permission information in your user model. It's up to you to add the appropriate fields to support your authorization scheme.
 
 ## A simple scheme
 
-Here is a basic CanCan Ability class for a message board.
+Here is a basic CanCanCan Ability class for a message board.
 
 The rules are: anyone can post. Registered users can edit their post after posting (but not delete it). Moderators can do anything to any post.
 ```ruby
@@ -117,9 +117,9 @@ The rules are: anyone can post. Registered users can edit their post after posti
       end
     end
 ```
-`:manage` is a special CanCan action which means "any action". So users with an admin column set to `true` can do anything to any Post.
+`:manage` is a special CanCanCan action which means "any action". So users with an admin column set to `true` can do anything to any Post.
 
 ## Resources
-  * [CanCan]
+  * [CanCanCan]
 
 [CanCanCan]: https://github.com/CanCanCommunity/cancancan
