@@ -16,9 +16,9 @@ We have been looking at different modes of authentication. Now, we'll shift our 
 
 (Also, in case you were wondering, standard UNIX permissions let you delete a file you don't own and can't write to. You must, however, be able to write to the directory that contains the file.)
 
-## Cancan
+## CancanCan
 
-[CanCanCan] is a gem for Rails that provides a simple but quite flexible way to authorize users to perform actions.
+[CanCanCan] is a gem for Rails that provides a simple but quite flexible way to authorize users to perform actions.  It's the continuation of a no longer maintained gem [CanCan](https://github.com/ryanb/cancan).
 
 In your controllers, it looks like this:
 ```ruby
