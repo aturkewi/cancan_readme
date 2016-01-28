@@ -18,19 +18,41 @@ We have been looking at different modes of authentication. Now, we'll shift our 
 
 ## Cancan
 
-[CanCan] is a gem for Rails that provides a simple but quite flexible way to authorize users to perform actions.
+[CanCanCan] is a gem for Rails that provides a simple but quite flexible way to authorize users to perform actions.
 
 In your controllers, it looks like this:
-
+```ruby
     def show
       @article = Article.find(params[:id])
       authorize! :read, @article
     end
-
+```
 Here we're calling CanCan's `authorize!` method to determine if the user can `:read` this `@article`. If they can't, an exception is thrown.
 
-In your views, it might look like this:
+Setting this for every action can be tedious, therefore the load_and_authorize_resource method is provided to automatically authorize all actions in a controller. It will use a before filter to load the resource into an instance variable and authorize it for every action.
 
+```ruby
+class ArticlesController < ApplicationController
+  load_and_authorize_resource
+
+  def show
+    # @article is already loaded and authorized
+  end
+end
+```
+
+#Handling Unauthorized Access
+
+If the user authorization fails, a CanCan::AccessDenied exception will be raised. You can catch this and modify its behavior in the ApplicationController.
+
+class ApplicationController < ActionController::Base
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to root_url, :alert => exception.message
+  end
+end
+
+In your views, it might look like this:
+```erb
     <% if can? :update, @article %>
       <%= link_to "Edit", edit_article_path(@article) %>
     <% end %>
@@ -40,9 +62,13 @@ Or maybe this:
    <% if cannot? :update, @article %>
      Editing disabled.
    <% end %>
+```
 
-To define the permissions, you write an `Ability` class, which goes a bit like this:
+#Abilities
+To generate the ability file you can run `rails g cancan:ability`
 
+To define the permissions, you fill out the `Ability` class, which goes a bit like this:
+```ruby
     class Ability
       include CanCan::Ability
       
@@ -55,17 +81,17 @@ To define the permissions, you write an `Ability` class, which goes a bit like t
         can :read, Article
       end
     end
-
-Your `Ability` class is passed an instance of your `User` model. In the initializer, you call `can` or `cannot` to define what this particular user can do.
+```
+Your `Ability` class is passed an instance of your `User` model by calling the current_user method. In the initializer, you call `can` or `cannot` to define what this particular user can do.
 
 `can` and `cannot` both take as arguments the action as a symbol and an ActiveRecord class, an instance of which is the target of the action. You can be more specific if you want to allow or disallow actions based on information in the models. For example,
-
+```ruby
     can :write, Article, owner_id: user.id
-
+```
 This will let the user write any article whose `owner_id` is her user id. (That is, any Article she owns).
-
+```ruby
     can :read, Article, :category => { :visible => true }
-
+```
 This will let the user `:read` any `Project` whose `category`'s `visible` column is `true`.
 
 CanCan doesn't make any assumptions about how you've stored permission information in your user model. It's up to you to add the appropriate fields to support your authorization scheme.
@@ -75,26 +101,25 @@ CanCan doesn't make any assumptions about how you've stored permission informati
 Here is a basic CanCan Ability class for a message board.
 
 The rules are: anyone can post. Registered users can edit their post after posting (but not delete it). Moderators can do anything to any post.
-
+```ruby
     class Abilility
       include CanCan::Ability
 
       def initialize(user)
         can :read, Post
-	can :create, Post
-
+      	can :create, Post
         unless user.nil? # guest
-	  can :update, Post
-	end
-	if user.admin?
-	  can :manage, Post
-	end
+      	  can :update, Post
+      	end
+      	if user.admin?
+      	  can :manage, Post
+      	end
       end
     end
-
+```
 `:manage` is a special CanCan action which means "any action". So users with an admin column set to `true` can do anything to any Post.
 
 ## Resources
   * [CanCan]
 
-[CanCan]: https://github.com/ryanb/cancan
+[CanCanCan]: https://github.com/CanCanCommunity/cancancan
