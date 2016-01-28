@@ -41,7 +41,7 @@ class ArticlesController < ApplicationController
 end
 ```
 
-#Handling Unauthorized Access
+##Handling Unauthorized Access
 
 If the user authorization fails, a CanCan::AccessDenied exception will be raised. You can catch this and modify its behavior in the ApplicationController.
 
@@ -64,7 +64,7 @@ Or maybe this:
    <% end %>
 ```
 
-#Abilities
+##Abilities
 To generate the ability file you can run `rails g cancan:ability`
 
 To define the permissions, you fill out the `Ability` class, which goes a bit like this:
