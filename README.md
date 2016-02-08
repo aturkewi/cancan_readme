@@ -1,5 +1,11 @@
 # Authorization with CancanCan
 
+## Objectives
+1. Understand how to create an Ability class.
+2. Learn how to model permissions in the database.
+3. Prevent users from accessing certain actions from the controller.
+4. Prevent users from seeing certain pieces of the view.
+
 ## Overview
 
 We have been looking at different modes of authentication. Now, we'll shift our focus, and start dealing with authorization: how do you describe a permissions model, and how do you implement it in Rails?
@@ -35,11 +41,11 @@ end
 
 If the user authorization fails, a CanCan::AccessDenied exception will be raised. You can catch this and modify its behavior in the ApplicationController.
 
-class ApplicationController < ActionController::Base
+```class ApplicationController < ActionController::Base
   rescue_from CanCan::AccessDenied do |exception|
     redirect_to root_url, :alert => exception.message
   end
-end
+end```
 
 In your views, it might look like this:
 ```erb
@@ -113,3 +119,4 @@ The rules are: anyone can post. Registered users can edit their post after posti
   * [CanCanCan]
 
 [CanCanCan]: https://github.com/CanCanCommunity/cancancan
+<p data-visibility='hidden'>View <a href='https://learn.co/lessons/cancan_readme'>Cancan </a> on Learn.co and start learning to code for free.</p>
